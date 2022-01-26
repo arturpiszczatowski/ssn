@@ -68,6 +68,59 @@ neuron neuron_maker(double input, vector<double> weights){
     return new_neuron;
 }
 
+//
+//      -- N1 --
+//              \
+//               N3 --
+//              /
+//      -- N2 --
+
+int simple_network_function(network current_network){
+
+    neuron neuron_1 = current_network[0];
+    neuron neuron_2 = current_network[1];
+
+
+    double input_1 = neuron_1[0][0];
+    double input_2 = neuron_2[0][0];
+
+    weight weight_1;
+    weight_1.push_back(neuron_1[1][0]);
+    weight_1.push_back(neuron_1[1][1]);
+
+    double bias_1 = weight_1[0];
+
+    weight weight_2;
+    weight_2.push_back(neuron_2[1][0]);
+    weight_2.push_back(neuron_2[1][1]);
+
+    double bias_2 = weight_2[0];
+
+    double induction_1 = bias_1 + input_1 * weight_1[1];
+    double induction_2 = bias_2 + input_2 * weight_2[1];
+
+
+    double activation_1 = induction_1 < 0 ? 0:1;
+    double activation_2 = induction_2 < 0 ? 0:1;
+
+    neuron neuron_3=current_network[2];
+
+    input_1 = activation_1;
+    input_2 = activation_2;
+
+    weight weight_3;
+    weight_3.push_back(neuron_3[1][0]);
+    weight_3.push_back(neuron_3[1][1]);
+    weight_3.push_back(neuron_3[1][2]);
+
+    double bias_3 = weight_3[0];
+
+    double induction_3 = bias_3 + input_1 * weight_3[1] + input_2 * weight_3[2];
+
+    double activation_3 = induction_3 < 0 ? 0:1;
+
+    return activation_3;
+}
 
 int main(int argc, char** argv)
 {
