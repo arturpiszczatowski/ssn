@@ -4,6 +4,8 @@
 #include <memory>
 #include <random>
 #include <vector>
+#include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -11,7 +13,29 @@ using weight = vector<double>;
 using neuron = vector<vector<double>>;
 using network = vector<vector<vector<double>>>;
 
+neuron neuron_maker(double input, vector<double> weights){
+    neuron new_neuron = {{input},
+                         {weights}};
+    return new_neuron;
+}
 
+void generate_graphviz(vector<double> graph_inputs, vector<double> graph_biases, vector<double> graph_weights, double output){
+
+    string graph_code = "digraph G {\n"
+                        "\"input_1= " + to_string(graph_inputs[0]) + "\"" + " -> \"n1{bias=" + to_string(graph_biases[0]) + "}\" [taillabel = \"weight=" + to_string(graph_weights[0]) + "\"]\n" +
+                        "\"input_2= " + to_string(graph_inputs[1]) + "\"" + " -> \"n2{bias=" + to_string(graph_biases[1]) + "}\" [taillabel = \"weight=" + to_string(graph_weights[1]) + "\"]\n" +
+                        "\"n2{bias=" + to_string(graph_biases[1]) + "}\"" + " -> \"n3{bias=" + to_string(graph_biases[2]) + "}\"" + " [taillabel = \"weight=" + to_string(graph_weights[2]) + "\"]\n" +
+                        "\"n1{bias=" + to_string(graph_biases[0]) + "}\"" + " -> \"n3{bias=" + to_string(graph_biases[2]) + "}\"" + " [taillabel = \"weight=" + to_string(graph_weights[3]) + "\"]\n" +
+                        "\"n3{bias=" + to_string(graph_biases[2]) + "}\"" + " -> " + to_string(output) + "\n}";
+
+    ofstream out("output.txt");
+    out << setprecision(2) << graph_code;
+    out.close();
+}
+
+void show_network(vector<double> graph_inputs, vector<double> graph_biases, vector<double> graph_weights, double output){
+
+}
 
 int xor_function(network current_network){
 
@@ -62,20 +86,15 @@ int xor_function(network current_network){
     return activation_3;
 }
 
-neuron neuron_maker(double input, vector<double> weights){
-    neuron new_neuron = {{input},
-                         {weights}};
-    return new_neuron;
-}
 
-//
+// Homework network
 //      -- N1 --
 //              \
 //               N3 --
 //              /
 //      -- N2 --
 
-int simple_network_function(network current_network){
+double simple_network_function(network current_network){
 
     neuron neuron_1 = current_network[0];
     neuron neuron_2 = current_network[1];
@@ -119,6 +138,12 @@ int simple_network_function(network current_network){
 
     double activation_3 = induction_3 < 0 ? 0:1;
 
+    vector<double> graph_inputs{neuron_1[0][0], neuron_2[0][0]};
+    vector<double> graph_biases{bias_1, bias_2, bias_3};
+    vector<double> graph_weights{weight_1[1], weight_2[1], weight_3[1], weight_3[2]};
+
+    generate_graphviz(graph_inputs, graph_biases, graph_weights, activation_3);
+
     return activation_3;
 }
 
@@ -127,19 +152,22 @@ int main(int argc, char** argv)
     double input_1 = stof(argv[1]);
     double input_2 = stof(argv[2]);
 
-    vector<double> weights_1 = {-0.5, 1, 1};
-    vector<double> weights_2 = {1.5, -1, -1};
+
+    vector<double> weights_1 = {-0.5, 1};
+    vector<double> weights_2 = {1.5, -1};
     vector<double> weights_3 = {-1.5, 1, 1};
 
+    //xor neurons
     neuron neuron_1 = neuron_maker(input_1, weights_1);
     neuron neuron_2 = neuron_maker(input_2, weights_2);
     neuron neuron_3 = neuron_maker({},weights_3);
 
+    //xor network
     network new_network = {neuron_1,
                            neuron_2,
                            neuron_3};
 
-    cout << xor_function(new_network);
+    cout << simple_network_function(new_network);
 
 }
 
