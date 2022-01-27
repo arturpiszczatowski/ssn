@@ -33,8 +33,14 @@ void generate_graphviz(vector<double> graph_inputs, vector<double> graph_biases,
     out.close();
 }
 
-void show_network(vector<double> graph_inputs, vector<double> graph_biases, vector<double> graph_weights, double output){
-
+void show_network(vector<double> graph_inputs, vector<double> graph_biases, vector<double> graph_weights, vector<double> inductions, vector<double> activations){
+    cout << "\nInputs: {" + to_string(graph_inputs[0]) + ", " + to_string(graph_inputs[1]) + "}\n";
+    cout << "\nNode_1 => bias: " + to_string(graph_biases[0]) + ", weight: " + to_string(graph_weights[0])  + "\n";
+    cout << "induction: " + to_string(inductions[0]) + ", active: " + to_string(activations[0]) +"\n";
+    cout << "\nNode_2 => bias: " + to_string(graph_biases[1]) + ", weight: " + to_string(graph_weights[1])  + "\n";
+    cout << "induction: " + to_string(inductions[1]) + ", active: " + to_string(activations[1]) +"\n";
+    cout << "\nNode_3 => bias: " + to_string(graph_biases[2]) + ", weight: " + to_string(graph_weights[2])  + "\n";
+    cout << "induction: " + to_string(inductions[2]) + ", output: " + to_string(activations[2]) +"\n";
 }
 
 int xor_function(network current_network){
@@ -142,7 +148,11 @@ double simple_network_function(network current_network){
     vector<double> graph_biases{bias_1, bias_2, bias_3};
     vector<double> graph_weights{weight_1[1], weight_2[1], weight_3[1], weight_3[2]};
 
+    vector<double> inductions{induction_1, induction_2, induction_3};
+    vector<double> activations{activation_1, activation_2, activation_3};
+
     generate_graphviz(graph_inputs, graph_biases, graph_weights, activation_3);
+    show_network(graph_inputs, graph_biases, graph_weights, inductions, activations);
 
     return activation_3;
 }
@@ -157,17 +167,15 @@ int main(int argc, char** argv)
     vector<double> weights_2 = {1.5, -1};
     vector<double> weights_3 = {-1.5, 1, 1};
 
-    //xor neurons
     neuron neuron_1 = neuron_maker(input_1, weights_1);
     neuron neuron_2 = neuron_maker(input_2, weights_2);
     neuron neuron_3 = neuron_maker({},weights_3);
 
-    //xor network
     network new_network = {neuron_1,
                            neuron_2,
                            neuron_3};
 
-    cout << simple_network_function(new_network);
+    simple_network_function(new_network);
 
 }
 

@@ -1,7 +1,7 @@
 digraph G {
-"input_1= 0.000000" -> "n1{bias=-0.500000}" [taillabel = "weight=1.000000"]
-"input_2= 1.000000" -> "n2{bias=1.500000}" [taillabel = "weight=-1.000000"]
+"input_1= 1.000000" -> "n1{bias=-0.500000}" [taillabel = "weight=1.000000"]
+"input_2= 0.000000" -> "n2{bias=1.500000}" [taillabel = "weight=-1.000000"]
 "n2{bias=1.500000}" -> "n3{bias=-1.500000}" [taillabel = "weight=1.000000"]
 "n1{bias=-0.500000}" -> "n3{bias=-1.500000}" [taillabel = "weight=1.000000"]
-"n3{bias=-1.500000}" -> 0.000000
+"n3{bias=-1.500000}" -> 1.000000
 }
